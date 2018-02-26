@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ScrollingImageView">
+        <attr name="scrollType" format="enum">
+            <enum name="whole" value="0"/>
+            <enum name="middle" value="1"/>
+        </attr>
+    </declare-styleable>
+</resources>
