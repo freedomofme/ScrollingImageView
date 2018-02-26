@@ -26,7 +26,7 @@ Gradle integration
 该库托管于jCenter仓库中，使用时只需要添加以下代码
 
 	dependencies {
-  	  compile 'com.flaviofaria:kenburnsview:1.0.7'
+  	  compile 'site.okhttp.codeyel:scrollingImageView:1.0.0'
 	}
 
 Basic uasge
