@@ -3,6 +3,7 @@ ScrollingImageView
 
  一个用于放置在RecycleView中的图片控件，其主要功能是跟随列表的上下滚动而上下平移，使得呈现出一种图像相对列表静止的感觉。
  
+[![Github All Releases](https://img.shields.io/github/downloads/atom/atom/total.svg)]()
 
 Overview
 -----------
