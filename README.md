@@ -74,8 +74,7 @@ Principle
 
 * 当在该控件顶部和在中部时：
 
-<img src="./top.jpeg" width="200"/>
-<img src="./middle.jpeg" width="200"/>
+<img src="./top.jpeg" width="200"/><img src="./middle.jpeg" width="200"/>
 
 * 平移时的前后对比
 
