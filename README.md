@@ -61,6 +61,27 @@ Advance uasge
 
 1. 开放自定义滚动的接口
 
+
+Principle
+===
+1. 重写setFrame方法：通过postTranslate方法垂直平移图片，从而显示图片中的不同位置。
+2. 设置OnScrollListener监听器，监听列表的滚动位置，来计算获得恰当的平移参数，并将其传递给步骤①中的postTranslate方法。
+
+**如下图所示**
+
+* 原图：
+
+<img src="./origin.jpg" alt="Drawing" style="width: 200px;"/>
+
+* 当在该控件顶部和在中部时：
+
+<img src="./top.jpeg" alt="Drawing" style="width: 200px;"/>
+<img src="./middle.jpeg" alt="Drawing" style="width: 200px;"/>
+
+* 平移时的前后对比
+
+<img src="./prin.jpg" alt="Drawing" style="width: 700px;"/>
+
   	
 Contribution
 ------------
