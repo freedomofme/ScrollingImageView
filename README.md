@@ -12,11 +12,11 @@ Overview
 
 **scrollType为whole时, 从刚进入列表和完全出列表是都在滚动**
 
-![wholeType-android.gif](wholeType-android.gif)
+<img src="./wholeType-android.gif" width="200"/>
 
 **scrollType: middle时，仅当item完整展现在列列表中时才滚动**
 
-![middleType-android.gif](middleType-android.gif)
+<img src="./middleType-android.gif" width="200"/>
 
 **Demo** [示例代码](https://github.com/freedomofme/ScrollingImageView/tree/master/example)
 
@@ -70,12 +70,12 @@ Principle
 
 * 原图：
 
-<img src="./origin.jpg" alt="Drawing" style="width: 200px;"/>
+<img src="./origin.jpg" width="200"/>
 
 * 当在该控件顶部和在中部时：
 
-<img src="./top.jpeg" alt="Drawing" style="width: 200px;"/>
-<img src="./middle.jpeg" alt="Drawing" style="width: 200px;"/>
+<img src="./top.jpeg" width="200"/>
+<img src="./middle.jpeg" width="200"/>
 
 * 平移时的前后对比
 
