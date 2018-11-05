@@ -5,30 +5,35 @@ package com.yel.image;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
-public class ScrollingImageView extends android.support.v7.widget.AppCompatImageView {
-    private float yPercent = 0.5f;
+public class ScrollingImageView extends FrameLayout {
     private ScrollType mScrollType;
+
+    private View child;
 
     public enum ScrollType {
         /**
          * View从开始到结束，一直在滑动
          */
-        SCROLL_WHOLE (0),
+        SCROLL_WHOLE(0),
 
         /**
          * View只当在完整显示时才开始滚动
          */
-        SCROLL_MIDDLE (1);
+        SCROLL_MIDDLE(1);
 
         ScrollType(int ni) {
             nativeInt = ni;
         }
+
         final int nativeInt;
     }
 
@@ -39,7 +44,6 @@ public class ScrollingImageView extends android.support.v7.widget.AppCompatImage
 
     public ScrollingImageView(Context context) {
         super(context);
-        setup();
     }
 
     public ScrollingImageView(Context context, AttributeSet attrs) {
@@ -61,10 +65,16 @@ public class ScrollingImageView extends android.support.v7.widget.AppCompatImage
             a.recycle();
         }
 
-        RecyclerView temp = getRecyclerView((ViewGroup) this.getParent());
-        System.out.println("temp: " + temp);
+    }
 
-        setup();
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (child == null) {
+            RecyclerView temp = getRecyclerView((ViewGroup) this.getParent());
+            temp.addOnScrollListener(new ScrollListener(this));
+            child = getChildAt(0);
+        }
     }
 
     private RecyclerView getRecyclerView(ViewGroup v) {
@@ -76,15 +86,11 @@ public class ScrollingImageView extends android.support.v7.widget.AppCompatImage
         }
         return getRecyclerView((ViewGroup) v.getParent());
     }
-    private void setup() {
-        // 设置ImageView的必须ScaleType
-        setScaleType(ScaleType.MATRIX);
-    }
+
 
     public void setScrollType(ScrollType scrollType) {
         if (mScrollType != scrollType) {
             mScrollType = scrollType;
-            // todo 好像要做点什么。。
         }
     }
 
@@ -92,31 +98,15 @@ public class ScrollingImageView extends android.support.v7.widget.AppCompatImage
         return mScrollType;
     }
 
-    public void setyPercent(float yPercent) {
-        this.yPercent = yPercent;
-        requestLayout();
-        // 由于在setFrame中的setImageMatrix中调用了invalidate。所以这里不必再调用了
-        // invalidate();
-    }
-
-   private int getViewHeight() {
-       return getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
-    }
-
-    @Override
-    protected boolean setFrame(int l, int t, int r, int b) {
-        if (getDrawable() == null)
-            return super.setFrame(l, t, r, b);
-
-        Matrix matrix = getImageMatrix();
-
+    public void setPercent(float yPercent) {
+        matrix = child.getMatrix();
         float scale;
         float dx = 0, dy = 0;
 
         int viewWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
         int viewHeight = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
-        int drawableWidth = getDrawable().getIntrinsicWidth();
-        int drawableHeight = getDrawable().getIntrinsicHeight();
+        int drawableWidth = child.getMeasuredWidth();
+        int drawableHeight = child.getMeasuredHeight();
         // Get the scale
         if (drawableWidth * viewHeight > drawableHeight * viewWidth) {
             scale = (float) viewHeight / (float) drawableHeight;
@@ -131,54 +121,63 @@ public class ScrollingImageView extends android.support.v7.widget.AppCompatImage
                 dy = (viewHeight - drawableHeight * scale) * yPercent;
             }
         }
-
+        Log.i("ScrollListener", "dy:" + dy);
         matrix.setScale(scale, scale);
         matrix.postTranslate(Math.round(dx), Math.round(dy));
-
-        setImageMatrix(matrix);
-
-        return super.setFrame(l, t, r, b);
+        invalidate();
     }
 
-    public static class ScrollListener extends RecyclerView.OnScrollListener {
+    private int getViewHeight() {
+        return getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
+    }
+
+    Matrix matrix;
+
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        canvas.save();
+        canvas.concat(matrix);
+        super.dispatchDraw(canvas);
+        canvas.restore();
+    }
+
+
+    private class ScrollListener extends RecyclerView.OnScrollListener {
         int ydy = 0;
-        private RecyclerView.LayoutManager layoutManager;
-        private int id;
-        private int index;
-        public ScrollListener(RecyclerView.LayoutManager layoutManager, int id, int index) {
-            this.layoutManager = layoutManager;
-            this.id = id;
-            this.index = index;
+        private ScrollingImageView child;
+
+        ScrollListener(ScrollingImageView child) {
+            this.child = child;
         }
+
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
             ydy += dy;
-            System.out.println(ydy);
-
-            View item = layoutManager.findViewByPosition(index);
-            if (item != null) {
-                float Offset = item.getTop();
-                ScrollingImageView image = item.findViewById(id);
-                int viewHeight = image.getViewHeight();
+            if (child != null) {
+                float Offset = child.getTop();
+                int viewHeight = child.getViewHeight();
 
                 int recyclerViewHeight = recyclerView.getHeight();
-
-//                System.out.println("Height: " + recyclerViewHeight);
-//                System.out.println("Offset: " + Offset);
-
                 final double bottomDelta = recyclerViewHeight - viewHeight;
+                //    Log.i("ScrollListener", "offset:" + Offset);
+                //  Log.i("ScrollListener", "bottomDelta:" + bottomDelta);
 
-                if (image.getScrollType() == ScrollType.SCROLL_WHOLE) {
+
+                if (child.getScrollType() == ScrollType.SCROLL_WHOLE) {
                     float ratio = (Offset + viewHeight) / 1.0f / (recyclerViewHeight + viewHeight);
-                    image.setyPercent(ratio);
-                } else if (image.getScrollType() == ScrollType.SCROLL_MIDDLE) {
+
+                    child.setPercent(ratio);
+                } else if (child.getScrollType() == ScrollType.SCROLL_MIDDLE) {
+                    float percent = (float) (Offset / bottomDelta);
+                    //    Log.i("ScrollListener", "percent:" + percent);
                     if (Offset > bottomDelta) {
-                        image.setyPercent(1);
+                        child.setPercent(1);
                     } else if (Offset <= 0) {
-                        image.setyPercent(0);
+                        child.setPercent(0);
                     } else {
-                        image.setyPercent((float) (Offset / bottomDelta));
+                        child.setPercent(percent);
                     }
                 }
             }

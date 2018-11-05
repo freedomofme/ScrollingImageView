@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.yel.image.ScrollingImageView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="#FFFFFF"
+    android:id="@+id/parentLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <com.yel.image.ScrollingImageView
+    android:layout_height="200dp"
+    custom:scrollType="whole">
+
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/img"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        custom:scrollType="middle"
-        />
-</LinearLayout>
+        android:layout_height="600dp"
+        custom:actualImageResource="@mipmap/img6" />
+</com.yel.image.ScrollingImageView>

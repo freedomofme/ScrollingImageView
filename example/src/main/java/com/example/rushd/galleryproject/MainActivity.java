@@ -7,8 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.yel.image.ScrollingImageView;
-
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,23 +43,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.imagegallery);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.imagegallery);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addOnScrollListener(new ScrollingImageView.ScrollListener(layoutManager, R.id.img, 5));
+//        recyclerView.addOnScrollListener(new ScrollingImageView.ScrollListener(layoutManager, R.id.parentLayout, 5));
 
         ArrayList<CreateList> createLists = prepareData();
         MyAdapter adapter = new MyAdapter(getApplicationContext(), createLists);
         recyclerView.setAdapter(adapter);
 
     }
-    private ArrayList<CreateList> prepareData(){
+
+    private ArrayList<CreateList> prepareData() {
         ArrayList<CreateList> images = new ArrayList<>();
-        for(int i = 0; i< image_titles.length; i++){
-            CreateList createList = new CreateList();
-            createList.setImage_title(image_titles[i]);
-            createList.setImage_ID(image_ids[i]);
-            images.add(createList);
+        for (int j = 0; j < 5; j++) {
+            for (int i = 0; i < image_titles.length; i++) {
+                CreateList createList = new CreateList();
+                createList.setImage_title(image_titles[i]);
+                createList.setImage_ID(image_ids[i]);
+                images.add(createList);
+            }
         }
         return images;
     }

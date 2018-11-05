@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AdImageView.iml" filepath="$PROJECT_DIR$/AdImageView.iml" />
-      <module fileurl="file://$PROJECT_DIR$/example/app.iml" filepath="$PROJECT_DIR$/example/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ScrollingImageView.iml" filepath="$PROJECT_DIR$/ScrollingImageView.iml" />
       <module fileurl="file://$PROJECT_DIR$/example/example.iml" filepath="$PROJECT_DIR$/example/example.iml" />
-      <module fileurl="file://$PROJECT_DIR$/scrollingImageView/adimage.iml" filepath="$PROJECT_DIR$/scrollingImageView/adimage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/scrollingImageView/scrollingImageView.iml" filepath="$PROJECT_DIR$/scrollingImageView/scrollingImageView.iml" />
     </modules>
   </component>
 </project>

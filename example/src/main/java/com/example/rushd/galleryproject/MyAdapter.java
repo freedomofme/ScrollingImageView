@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.facebook.drawee.view.SimpleDraweeView;
+
 import java.util.ArrayList;
 
 public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -24,10 +26,10 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         switch (viewType) {
-            case 0 :
+            case 0:
                 View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cell_layout, viewGroup, false);
                 return new ViewHolder(view);
-            case 1 :
+            case 1:
                 View view2 = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.scroll_img, viewGroup, false);
                 return new ViewHolder2(view2);
         }
@@ -37,7 +39,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == 1) {
-            ((ViewHolder2) holder).img.setImageResource((galleryList.get(position).getImage_ID()));
+            ((ViewHolder2) holder).img.setActualImageResource((galleryList.get(position).getImage_ID()));
         } else {
             ((ViewHolder) holder).img.setScaleType(ImageView.ScaleType.CENTER_CROP);
             ((ViewHolder) holder).img.setImageResource((galleryList.get(position).getImage_ID()));
@@ -55,7 +57,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public int getItemViewType(int position) {
         // Just as an example, return 0 or 2 depending on position
         // Note that unlike in ListView adapters, types don't have to be contiguous
-        return position == 5 ? 1 : 0;
+        return position % 5 == 0 ? 1 : 0;
     }
 
 
@@ -64,16 +66,18 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return galleryList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView img;
+
         public ViewHolder(View view) {
             super(view);
             img = view.findViewById(R.id.img);
         }
     }
 
-    public class ViewHolder2 extends RecyclerView.ViewHolder{
-        private ImageView img;
+    public class ViewHolder2 extends RecyclerView.ViewHolder {
+        private SimpleDraweeView img;
+
         public ViewHolder2(View view) {
             super(view);
             img = view.findViewById(R.id.img);
